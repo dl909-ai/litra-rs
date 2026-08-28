@@ -19,6 +19,9 @@ use crate::{
     handle_temperature_up_command, handle_toggle_command, CliError, CliResult, DeviceInfo,
 };
 
+const BRIGHTNESS_PARAMETER_ERROR: &str =
+    "Exactly one of `value` or `percentage` must be provided.";
+
 /// Wrapper struct for device list to satisfy MCP's requirement for object root type
 #[derive(serde::Serialize, schemars::JsonSchema)]
 pub struct DeviceListResponse {
@@ -29,6 +32,16 @@ pub struct DeviceListResponse {
 // Helper function to convert string to DeviceType
 fn parse_device_type(device_type_str: Option<&String>) -> Option<DeviceType> {
     device_type_str.and_then(|s| DeviceType::from_str(s).ok())
+}
+
+fn validate_brightness_parameters(
+    value: Option<u16>,
+    percentage: Option<u8>,
+) -> Result<(), &'static str> {
+    match (value, percentage) {
+        (Some(_), None) | (None, Some(_)) => Ok(()),
+        _ => Err(BRIGHTNESS_PARAMETER_ERROR),
+    }
 }
 
 #[derive(serde::Deserialize, schemars::JsonSchema)]
@@ -108,11 +121,7 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Turn Logitech Litra device(s) on. By default, all devices will be targeted, but you can optionally specify a serial number, device path, or device type.",
-        annotations(
-            destructive_hint = false,
-            idempotent_hint = true,
-            open_world_hint = false
-        )
+        annotations(destructive_hint = false, idempotent_hint = true, open_world_hint = false)
     )]
     async fn litra_on(
         &self,
@@ -132,11 +141,7 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Turn Logitech Litra device(s) off. By default, all devices will be targeted, but you can optionally specify a serial number, device path, or device type.",
-        annotations(
-            destructive_hint = false,
-            idempotent_hint = true,
-            open_world_hint = false
-        )
+        annotations(destructive_hint = false, idempotent_hint = true, open_world_hint = false)
     )]
     async fn litra_off(
         &self,
@@ -156,11 +161,7 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Toggle Logitech Litra device(s) on or off. By default, all devices will be targeted, but you can optionally specify a serial number, device path, or device type.",
-        annotations(
-            destructive_hint = false,
-            idempotent_hint = false,
-            open_world_hint = false
-        )
+        annotations(destructive_hint = false, idempotent_hint = false, open_world_hint = false)
     )]
     async fn litra_toggle(
         &self,
@@ -180,16 +181,16 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Set the brightness of Logitech Litra device(s). By default, all devices will be targeted, but you can optionally specify a serial number, device path, or device type.",
-        annotations(
-            destructive_hint = false,
-            idempotent_hint = true,
-            open_world_hint = false
-        )
+        annotations(destructive_hint = false, idempotent_hint = true, open_world_hint = false)
     )]
     async fn litra_brightness(
         &self,
         Parameters(params): Parameters<LitraBrightnessParams>,
     ) -> Result<CallToolResult, McpError> {
+        if let Err(message) = validate_brightness_parameters(params.value, params.percentage) {
+            return Ok(CallToolResult::error(vec![Content::text(message)]));
+        }
+
         match handle_brightness_command(
             params.serial_number.as_deref(),
             params.device_path.as_deref(),
@@ -206,16 +207,16 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Increase the brightness of Logitech Litra device(s). By default, all devices will be targeted, but you can optionally specify a serial number, device path, or device type.",
-        annotations(
-            destructive_hint = false,
-            idempotent_hint = false,
-            open_world_hint = false
-        )
+        annotations(destructive_hint = false, idempotent_hint = false, open_world_hint = false)
     )]
     async fn litra_brightness_up(
         &self,
         Parameters(params): Parameters<LitraBrightnessParams>,
     ) -> Result<CallToolResult, McpError> {
+        if let Err(message) = validate_brightness_parameters(params.value, params.percentage) {
+            return Ok(CallToolResult::error(vec![Content::text(message)]));
+        }
+
         match handle_brightness_up_command(
             params.serial_number.as_deref(),
             params.device_path.as_deref(),
@@ -232,16 +233,16 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Decrease the brightness of Logitech Litra device(s). By default, all devices will be targeted, but you can optionally specify a serial number, device path, or device type.",
-        annotations(
-            destructive_hint = false,
-            idempotent_hint = false,
-            open_world_hint = false
-        )
+        annotations(destructive_hint = false, idempotent_hint = false, open_world_hint = false)
     )]
     async fn litra_brightness_down(
         &self,
         Parameters(params): Parameters<LitraBrightnessParams>,
     ) -> Result<CallToolResult, McpError> {
+        if let Err(message) = validate_brightness_parameters(params.value, params.percentage) {
+            return Ok(CallToolResult::error(vec![Content::text(message)]));
+        }
+
         match handle_brightness_down_command(
             params.serial_number.as_deref(),
             params.device_path.as_deref(),
@@ -258,11 +259,7 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Set the temperature of Logitech Litra device(s). By default, all devices will be targeted, but you can optionally specify a serial number, device path, or device type.",
-        annotations(
-            destructive_hint = false,
-            idempotent_hint = true,
-            open_world_hint = false
-        )
+        annotations(destructive_hint = false, idempotent_hint = true, open_world_hint = false)
     )]
     async fn litra_temperature(
         &self,
@@ -283,11 +280,7 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Increase the temperature of Logitech Litra device(s). By default, all devices will be targeted, but you can optionally specify a serial number, device path, or device type.",
-        annotations(
-            destructive_hint = false,
-            idempotent_hint = false,
-            open_world_hint = false
-        )
+        annotations(destructive_hint = false, idempotent_hint = false, open_world_hint = false)
     )]
     async fn litra_temperature_up(
         &self,
@@ -308,11 +301,7 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Decrease the temperature of Logitech Litra device(s). By default, all devices will be targeted, but you can optionally specify a serial number, device path, or device type.",
-        annotations(
-            destructive_hint = false,
-            idempotent_hint = false,
-            open_world_hint = false
-        )
+        annotations(destructive_hint = false, idempotent_hint = false, open_world_hint = false)
     )]
     async fn litra_temperature_down(
         &self,
@@ -333,11 +322,7 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Turn the back light of Logitech Litra Beam LX device(s) on. By default, all Litra Beam LX devices will be targeted, but you can optionally specify a serial number or device path.",
-        annotations(
-            destructive_hint = false,
-            idempotent_hint = true,
-            open_world_hint = false
-        )
+        annotations(destructive_hint = false, idempotent_hint = true, open_world_hint = false)
     )]
     async fn litra_back_on(
         &self,
@@ -356,11 +341,7 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Turn the back light of Logitech Litra Beam LX device(s) off. By default, all Litra Beam LX devices will be targeted, but you can optionally specify a serial number or device path.",
-        annotations(
-            destructive_hint = false,
-            idempotent_hint = true,
-            open_world_hint = false
-        )
+        annotations(destructive_hint = false, idempotent_hint = true, open_world_hint = false)
     )]
     async fn litra_back_off(
         &self,
@@ -379,11 +360,7 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Toggle the back light of Logitech Litra Beam LX device(s) on or off. By default, all Litra Beam LX devices will be targeted, but you can optionally specify a serial number or device path.",
-        annotations(
-            destructive_hint = false,
-            idempotent_hint = false,
-            open_world_hint = false
-        )
+        annotations(destructive_hint = false, idempotent_hint = false, open_world_hint = false)
     )]
     async fn litra_back_toggle(
         &self,
@@ -402,11 +379,7 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Set the brightness of the back light on Logitech Litra Beam LX device(s). By default, all Litra Beam LX devices will be targeted, but you can optionally specify a serial number or device path.",
-        annotations(
-            destructive_hint = false,
-            idempotent_hint = true,
-            open_world_hint = false
-        )
+        annotations(destructive_hint = false, idempotent_hint = true, open_world_hint = false)
     )]
     async fn litra_back_brightness(
         &self,
@@ -426,11 +399,7 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Increase the brightness of the back light on Logitech Litra Beam LX device(s). By default, all Litra Beam LX devices will be targeted, but you can optionally specify a serial number or device path.",
-        annotations(
-            destructive_hint = false,
-            idempotent_hint = false,
-            open_world_hint = false
-        )
+        annotations(destructive_hint = false, idempotent_hint = false, open_world_hint = false)
     )]
     async fn litra_back_brightness_up(
         &self,
@@ -450,11 +419,7 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Decrease the brightness of the back light on Logitech Litra Beam LX device(s). By default, all Litra Beam LX devices will be targeted, but you can optionally specify a serial number or device path.",
-        annotations(
-            destructive_hint = false,
-            idempotent_hint = false,
-            open_world_hint = false
-        )
+        annotations(destructive_hint = false, idempotent_hint = false, open_world_hint = false)
     )]
     async fn litra_back_brightness_down(
         &self,
@@ -473,12 +438,8 @@ impl LitraMcpServer {
     }
 
     #[tool(
-        description = "Set the color of the back light on Logitech Litra Beam LX device(s). By default, all Litra Beam LX devices will be targeted, but you can optionally specify a serial number or device path. Can target a specific zone (1-7) or all zones.",
-        annotations(
-            destructive_hint = false,
-            idempotent_hint = true,
-            open_world_hint = false
-        )
+        description = "Set the color of the back light on Logitech Litra Beam LX device(s). By default, all Logitech Litra Beam LX devices will be targeted, but you can optionally specify a serial number or device path. Can target a specific zone (1-7) or all zones.",
+        annotations(destructive_hint = false, idempotent_hint = true, open_world_hint = false)
     )]
     async fn litra_back_color(
         &self,
@@ -553,4 +514,31 @@ pub fn handle_mcp_command() -> CliResult {
             .map_err(|e| CliError::MCPError(format!("{e}")))?;
         Ok(())
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{validate_brightness_parameters, BRIGHTNESS_PARAMETER_ERROR};
+
+    #[test]
+    fn brightness_parameters_accept_value_only() {
+        assert_eq!(validate_brightness_parameters(Some(250), None), Ok(()));
+    }
+
+    #[test]
+    fn brightness_parameters_accept_percentage_only() {
+        assert_eq!(validate_brightness_parameters(None, Some(50)), Ok(()));
+    }
+
+    #[test]
+    fn brightness_parameters_reject_invalid_combinations() {
+        assert_eq!(
+            validate_brightness_parameters(None, None),
+            Err(BRIGHTNESS_PARAMETER_ERROR)
+        );
+        assert_eq!(
+            validate_brightness_parameters(Some(250), Some(50)),
+            Err(BRIGHTNESS_PARAMETER_ERROR)
+        );
+    }
 }
