@@ -121,7 +121,11 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Turn Logitech Litra device(s) on. By default, all devices will be targeted, but you can optionally specify a serial number, device path, or device type.",
-        annotations(destructive_hint = false, idempotent_hint = true, open_world_hint = false)
+        annotations(
+            destructive_hint = false,
+            idempotent_hint = true,
+            open_world_hint = false
+        )
     )]
     async fn litra_on(
         &self,
@@ -141,7 +145,11 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Turn Logitech Litra device(s) off. By default, all devices will be targeted, but you can optionally specify a serial number, device path, or device type.",
-        annotations(destructive_hint = false, idempotent_hint = true, open_world_hint = false)
+        annotations(
+            destructive_hint = false,
+            idempotent_hint = true,
+            open_world_hint = false
+        )
     )]
     async fn litra_off(
         &self,
@@ -161,7 +169,11 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Toggle Logitech Litra device(s) on or off. By default, all devices will be targeted, but you can optionally specify a serial number, device path, or device type.",
-        annotations(destructive_hint = false, idempotent_hint = false, open_world_hint = false)
+        annotations(
+            destructive_hint = false,
+            idempotent_hint = false,
+            open_world_hint = false
+        )
     )]
     async fn litra_toggle(
         &self,
@@ -181,7 +193,11 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Set the brightness of Logitech Litra device(s). By default, all devices will be targeted, but you can optionally specify a serial number, device path, or device type.",
-        annotations(destructive_hint = false, idempotent_hint = true, open_world_hint = false)
+        annotations(
+            destructive_hint = false,
+            idempotent_hint = true,
+            open_world_hint = false
+        )
     )]
     async fn litra_brightness(
         &self,
@@ -207,7 +223,11 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Increase the brightness of Logitech Litra device(s). By default, all devices will be targeted, but you can optionally specify a serial number, device path, or device type.",
-        annotations(destructive_hint = false, idempotent_hint = false, open_world_hint = false)
+        annotations(
+            destructive_hint = false,
+            idempotent_hint = false,
+            open_world_hint = false
+        )
     )]
     async fn litra_brightness_up(
         &self,
@@ -233,7 +253,11 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Decrease the brightness of Logitech Litra device(s). By default, all devices will be targeted, but you can optionally specify a serial number, device path, or device type.",
-        annotations(destructive_hint = false, idempotent_hint = false, open_world_hint = false)
+        annotations(
+            destructive_hint = false,
+            idempotent_hint = false,
+            open_world_hint = false
+        )
     )]
     async fn litra_brightness_down(
         &self,
@@ -259,7 +283,11 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Set the temperature of Logitech Litra device(s). By default, all devices will be targeted, but you can optionally specify a serial number, device path, or device type.",
-        annotations(destructive_hint = false, idempotent_hint = true, open_world_hint = false)
+        annotations(
+            destructive_hint = false,
+            idempotent_hint = true,
+            open_world_hint = false
+        )
     )]
     async fn litra_temperature(
         &self,
@@ -280,7 +308,11 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Increase the temperature of Logitech Litra device(s). By default, all devices will be targeted, but you can optionally specify a serial number, device path, or device type.",
-        annotations(destructive_hint = false, idempotent_hint = false, open_world_hint = false)
+        annotations(
+            destructive_hint = false,
+            idempotent_hint = false,
+            open_world_hint = false
+        )
     )]
     async fn litra_temperature_up(
         &self,
@@ -301,7 +333,11 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Decrease the temperature of Logitech Litra device(s). By default, all devices will be targeted, but you can optionally specify a serial number, device path, or device type.",
-        annotations(destructive_hint = false, idempotent_hint = false, open_world_hint = false)
+        annotations(
+            destructive_hint = false,
+            idempotent_hint = false,
+            open_world_hint = false
+        )
     )]
     async fn litra_temperature_down(
         &self,
@@ -322,7 +358,11 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Turn the back light of Logitech Litra Beam LX device(s) on. By default, all Litra Beam LX devices will be targeted, but you can optionally specify a serial number or device path.",
-        annotations(destructive_hint = false, idempotent_hint = true, open_world_hint = false)
+        annotations(
+            destructive_hint = false,
+            idempotent_hint = true,
+            open_world_hint = false
+        )
     )]
     async fn litra_back_on(
         &self,
@@ -341,7 +381,11 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Turn the back light of Logitech Litra Beam LX device(s) off. By default, all Litra Beam LX devices will be targeted, but you can optionally specify a serial number or device path.",
-        annotations(destructive_hint = false, idempotent_hint = true, open_world_hint = false)
+        annotations(
+            destructive_hint = false,
+            idempotent_hint = true,
+            open_world_hint = false
+        )
     )]
     async fn litra_back_off(
         &self,
@@ -360,7 +404,11 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Toggle the back light of Logitech Litra Beam LX device(s) on or off. By default, all Litra Beam LX devices will be targeted, but you can optionally specify a serial number or device path.",
-        annotations(destructive_hint = false, idempotent_hint = false, open_world_hint = false)
+        annotations(
+            destructive_hint = false,
+            idempotent_hint = false,
+            open_world_hint = false
+        )
     )]
     async fn litra_back_toggle(
         &self,
@@ -379,7 +427,11 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Set the brightness of the back light on Logitech Litra Beam LX device(s). By default, all Litra Beam LX devices will be targeted, but you can optionally specify a serial number or device path.",
-        annotations(destructive_hint = false, idempotent_hint = true, open_world_hint = false)
+        annotations(
+            destructive_hint = false,
+            idempotent_hint = true,
+            open_world_hint = false
+        )
     )]
     async fn litra_back_brightness(
         &self,
@@ -399,7 +451,11 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Increase the brightness of the back light on Logitech Litra Beam LX device(s). By default, all Litra Beam LX devices will be targeted, but you can optionally specify a serial number or device path.",
-        annotations(destructive_hint = false, idempotent_hint = false, open_world_hint = false)
+        annotations(
+            destructive_hint = false,
+            idempotent_hint = false,
+            open_world_hint = false
+        )
     )]
     async fn litra_back_brightness_up(
         &self,
@@ -419,7 +475,11 @@ impl LitraMcpServer {
 
     #[tool(
         description = "Decrease the brightness of the back light on Logitech Litra Beam LX device(s). By default, all Litra Beam LX devices will be targeted, but you can optionally specify a serial number or device path.",
-        annotations(destructive_hint = false, idempotent_hint = false, open_world_hint = false)
+        annotations(
+            destructive_hint = false,
+            idempotent_hint = false,
+            open_world_hint = false
+        )
     )]
     async fn litra_back_brightness_down(
         &self,
@@ -438,8 +498,12 @@ impl LitraMcpServer {
     }
 
     #[tool(
-        description = "Set the color of the back light on Logitech Litra Beam LX device(s). By default, all Logitech Litra Beam LX devices will be targeted, but you can optionally specify a serial number or device path. Can target a specific zone (1-7) or all zones.",
-        annotations(destructive_hint = false, idempotent_hint = true, open_world_hint = false)
+        description = "Set the color of the back light on Logitech Litra Beam LX device(s). By default, all Litra Beam LX devices will be targeted, but you can optionally specify a serial number or device path. Can target a specific zone (1-7) or all zones.",
+        annotations(
+            destructive_hint = false,
+            idempotent_hint = true,
+            open_world_hint = false
+        )
     )]
     async fn litra_back_color(
         &self,
