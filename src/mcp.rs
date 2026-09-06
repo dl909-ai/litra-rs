@@ -21,6 +21,8 @@ use crate::{
 
 const BRIGHTNESS_PARAMETER_ERROR: &str =
     "Exactly one of `value` or `percentage` must be provided.";
+const BRIGHTNESS_PERCENTAGE_ERROR: &str =
+    "`percentage` must be between 1 and 100.";
 
 /// Wrapper struct for device list to satisfy MCP's requirement for object root type
 #[derive(serde::Serialize, schemars::JsonSchema)]
@@ -39,7 +41,8 @@ fn validate_brightness_parameters(
     percentage: Option<u8>,
 ) -> Result<(), &'static str> {
     match (value, percentage) {
-        (Some(_), None) | (None, Some(_)) => Ok(()),
+        (Some(_), None) | (None, Some(1..=100)) => Ok(()),
+        (None, Some(_)) => Err(BRIGHTNESS_PERCENTAGE_ERROR),
         _ => Err(BRIGHTNESS_PARAMETER_ERROR),
     }
 }
@@ -582,7 +585,10 @@ pub fn handle_mcp_command() -> CliResult {
 
 #[cfg(test)]
 mod tests {
-    use super::{validate_brightness_parameters, BRIGHTNESS_PARAMETER_ERROR};
+    use super::{
+        validate_brightness_parameters, BRIGHTNESS_PARAMETER_ERROR,
+        BRIGHTNESS_PERCENTAGE_ERROR,
+    };
 
     #[test]
     fn brightness_parameters_accept_value_only() {
@@ -604,5 +610,15 @@ mod tests {
             validate_brightness_parameters(Some(250), Some(50)),
             Err(BRIGHTNESS_PARAMETER_ERROR)
         );
+    }
+
+    #[test]
+    fn brightness_parameters_reject_percentage_outside_cli_range() {
+        for percentage in [0, 101, u8::MAX] {
+            assert_eq!(
+                validate_brightness_parameters(None, Some(percentage)),
+                Err(BRIGHTNESS_PERCENTAGE_ERROR)
+            );
+        }
     }
 }
